@@ -1,6 +1,6 @@
 import { customError } from "./custom-error.mjs";
 import { isValid } from "./cpf-validation.mjs";
-import { generateToken } from "./token-generator.mjs";
+import { generateValidToken } from "./token-generator.mjs";
 
 export const handler = async (event, _) => {
   const cpf = event?.queryStringParameters?.cpf;
@@ -15,7 +15,10 @@ export const handler = async (event, _) => {
     return customError(400, " CPF inválido");
   }
 
-  const token = generateToken(cpf);
+  const token = generateValidToken(cpf);
 
-  return token;
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ token }),
+  };
 };
